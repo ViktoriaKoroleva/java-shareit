@@ -1,85 +1,44 @@
 package ru.practicum.shareit.user;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.Validation.CreateObject;
-import ru.practicum.shareit.Validation.UpdateObject;
-import ru.practicum.shareit.Validation.ValidationService;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.mapper.UserMapper;
-import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.user.service.UserServiceDtoImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * TODO Sprint add-controllers.
  */
 @RestController
-@RequestMapping("users")
-@Slf4j
 @RequiredArgsConstructor
-@Validated
+@RequestMapping("/users")
 public class UserController {
-    private final UserService service;
-    private final UserMapper mapper;
-    private final ValidationService validationService;
+    private final UserServiceDtoImpl userService;
 
     @PostMapping
-    ResponseEntity<UserDto> addToStorage(@RequestBody @Validated(CreateObject.class) UserDto userDto) {
-
-        User user = mapper.mapToModel(userDto);
-        User createdUser = service.addToStorage(user);
-
-        ResponseEntity<UserDto> response = new ResponseEntity<>(
-                mapper.mapToDto(createdUser), HttpStatus.CREATED);
-        String message = String.format("В БД добавлен новый пользователь:\t%s", response.getBody());
-        log.info(message);
-        return response;
-    }
-
-    @PatchMapping("/{userId}")
-    UserDto updateInStorage(@PathVariable long userId,
-                            @Validated({UpdateObject.class}) @RequestBody UserDto userDto) {
-        userDto.setId(userId);
-        User user = mapper.mapToModel(userDto);
-        User updatedUser = service.updateInStorage(user);
-        log.info("Выполнено обновление пользователя в БД.");
-        return mapper.mapToDto(updatedUser);
-    }
-
-    @DeleteMapping("/{userId}")
-    ResponseEntity<String> removeFromStorage(@PathVariable Long userId) {
-        User deletedUser = validationService.checkExistUserInDB(userId);
-        service.removeFromStorage(userId);
-        String message = String.format("Выполнено удаление пользователя с ID = %d. %s", userId, deletedUser);
-        log.info(message);
-        return new ResponseEntity<>(message, HttpStatus.OK);
-    }
-
-    @GetMapping
-    ResponseEntity<List<UserDto>> getAllUsersFromStorage() {
-        List<UserDto> allUsersDto = new ArrayList<>();
-        List<User> allUsers = service.getAllUsers();
-
-        allUsers.stream().map(mapper::mapToDto).forEach(allUsersDto::add);
-
-        ResponseEntity<List<UserDto>> response = new ResponseEntity<>(allUsersDto, HttpStatus.OK);
-        log.info("Выдан список всех пользователей.");
-        return response;
+    public UserDto add(@Valid @RequestBody UserDto userDto) {
+        return userService.add(userDto);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
-        validationService.checkExistUserInDB(userId);
-        ResponseEntity<UserDto> response = new ResponseEntity<>(
-                mapper.mapToDto(service.getUserById(userId)), HttpStatus.OK);
-        String message = String.format("Выдан ответ на запрос пользователя по ID = %d:\t%s", userId, response);
-        log.info(message);
-        return response;
+    public UserDto findById(@PathVariable Long userId) {
+        return userService.findById(userId);
+    }
+
+    @GetMapping
+    public List<UserDto> findAll() {
+        return userService.findAll();
+    }
+
+    @PatchMapping("/{userId}")
+    public UserDto update(@PathVariable Long userId, @RequestBody UserDto userDto) {
+        return userService.update(userId, userDto);
+    }
+
+    @DeleteMapping("/{userId}")
+    public void delete(@PathVariable Long userId) {
+        userService.delete(userId);
     }
 }

@@ -1,46 +1,53 @@
 package ru.practicum.shareit.exception.controller;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.exception.ConflictException;
-import ru.practicum.shareit.exception.NotFoundRecordInBD;
-import ru.practicum.shareit.exception.ValidateException;
+import ru.practicum.shareit.exception.ErrorResponse;
+import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.NotUniqueEmailException;
 
-@RestControllerAdvice
 @Slf4j
-@Getter
+@RestControllerAdvice
 public class ErrorHandler {
-    
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<?> handleForBadRequest(final ValidateException ex) {
-        String error = "Error 400. Bad Request.";
-        String message = ex.getMessage();
-        log.error(error + " — " + message);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error + " — " + message);
-    }
-    
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<?> handleForNotFound(final NotFoundRecordInBD ex) {
-        String error = "Error 404. Not Found.";
-        String message = ex.getMessage();
-        log.error(error + " — " + message);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error + " — " + message);
+    public ErrorResponse handleNotFoundException(final NotFoundException e) {
+        log.warn("Объект не найден.");
+        return new ErrorResponse(
+                e.getMessage()
+
+        );
     }
-    
-    @ExceptionHandler
+
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleValidationException(final Exception e) {
+        log.warn("Ошибка валидации объекта");
+        return new ErrorResponse(
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler({NotUniqueEmailException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<?> handleForConflict(final ConflictException ex) {
-        String error = "Error 409. Conflict in program.";
-        String message = ex.getMessage();
-        log.error(error + " — " + message);
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error + " — " + message);
-    
+    public ErrorResponse handleNotUniqueEmailException(final RuntimeException e) {
+        log.warn("Не уникальный Email.");
+        return new ErrorResponse(
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleOtherException(final Throwable e) {
+        log.warn("Внутренняя ошибка сервера.");
+        return new ErrorResponse(
+                e.getMessage()
+        );
     }
 }

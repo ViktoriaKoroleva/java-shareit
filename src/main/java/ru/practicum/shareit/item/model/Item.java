@@ -1,23 +1,29 @@
 package ru.practicum.shareit.item.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.Set;
 
 /**
  * TODO Sprint add-controllers.
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Item {
-    private enum Status {free, busy}
+    private Long id;
+    private String name;
+    private String description;
+    private Boolean available;
+    private Long owner;
+    private Long request;
 
-    Long id;
-    String name;
-    String description;
-    Long ownerId;
-    Boolean available;
-    @JsonIgnore
-    Boolean isRequest;
-    Set<Long> reviews;
+    public Item(Long id, String name, String description, Boolean available, Long request) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.available = available;
+        this.request = request;
+    }
 }

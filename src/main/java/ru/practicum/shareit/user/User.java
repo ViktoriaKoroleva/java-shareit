@@ -6,9 +6,13 @@ import lombok.*;
  * TODO Sprint add-controllers.
  */
 @Data
+@AllArgsConstructor
 @RequiredArgsConstructor
 public class User {
-    Long id;
-    String name;
-    String email;
+
+    private Long id;
+
+    private String name;
+
+    private String email;
 }
