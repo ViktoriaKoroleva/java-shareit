@@ -78,6 +78,5 @@ public class ItemController {
         log.info("Была обновлена вещь {}, id = {}", result.getName(), result.getId());
         return result;
     }
-
 }
 
