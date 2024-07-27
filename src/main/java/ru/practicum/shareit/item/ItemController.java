@@ -59,15 +59,13 @@ public class ItemController {
     }
 
     @PostMapping
-    public ItemDto add(@RequestHeader(value = "X-Sharer-User-Id", required = false) Long ownerId,
-                       @RequestBody @Validated ItemDto itemDto) {
+    public ItemDto add(@RequestHeader(value = "X-Sharer-User-Id", required = false) Long ownerId, @RequestBody @Validated ItemDto itemDto) {
         itemDto.setOwnerId(ownerId);
         return mapper.mapToDto(itemService.add(mapper.mapToModel(itemDto), ownerId));
     }
 
     @PatchMapping("{itemId}")
-    public ItemDto update(@RequestHeader(value = "X-Sharer-User-Id", required = false) Long ownerId,
-                          @PathVariable Long itemId, @Validated @RequestBody ItemDto itemDto) {
+    public ItemDto update(@RequestHeader(value = "X-Sharer-User-Id", required = false) Long ownerId, @PathVariable Long itemId, @Validated @RequestBody ItemDto itemDto) {
         if (ownerId == null) {
             String message = "Для обновления надо передать ID хозяина вещи.";
             log.info("Error 400. " + message);
