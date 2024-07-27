@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.yandex.practicum.exception.ConflictException;
-import ru.yandex.practicum.exception.NotFoundRecordInBD;
-import ru.yandex.practicum.exception.ValidateException;
+import ru.practicum.shareit.exception.ConflictException;
+import ru.practicum.shareit.exception.NotFoundRecordInBD;
+import ru.practicum.shareit.exception.ValidateException;
 
 @RestControllerAdvice
 @Slf4j
