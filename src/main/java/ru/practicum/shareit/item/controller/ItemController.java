@@ -71,7 +71,17 @@ public class ItemController {
     @PatchMapping("{itemId}")
     public ItemDto update(@RequestHeader(value = "X-Sharer-User-Id", required = false) Long ownerId,
                           @PathVariable Long itemId, @Validated @RequestBody ItemDto itemDto) {
-        return getItemDto(ownerId, itemId, itemDto, log, mapper, itemService);
+        if (ownerId == null) {
+            String message = "Для обновления надо передать ID хозяина вещи.";
+            log.info("Error 400. " + message);
+            throw new ValidateException(message);
+        }
+        itemDto.setOwnerId(ownerId);
+        itemDto.setId(itemId);
+        Item item = mapper.mapToModel(itemDto);
+        ItemDto result = mapper.mapToDto(itemService.updateInStorage(item, ownerId));
+        log.info("Была обновлена вещь {}, id = {}", result.getName(), result.getId());
+        return result;
     }
     
 }

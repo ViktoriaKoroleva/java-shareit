@@ -2,7 +2,6 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exception.ValidateException;
@@ -69,10 +68,6 @@ public class ItemController {
     @PatchMapping("{itemId}")
     public ItemDto update(@RequestHeader(value = "X-Sharer-User-Id", required = false) Long ownerId,
                           @PathVariable Long itemId, @Validated @RequestBody ItemDto itemDto) {
-        return getItemDto(ownerId, itemId, itemDto, log, mapper, itemService);
-    }
-
-    public static ItemDto getItemDto(@RequestHeader(value = "X-Sharer-User-Id", required = false) Long ownerId, @PathVariable Long itemId, @RequestBody @Validated ItemDto itemDto, Logger log, ItemMapper mapper, ItemService itemService) {
         if (ownerId == null) {
             String message = "Для обновления надо передать ID хозяина вещи.";
             log.info("Error 400. " + message);
