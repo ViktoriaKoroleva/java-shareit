@@ -63,7 +63,7 @@ public class ItemServiceDtoImpl implements ItemServiceDto {
         userService.findById(userId);
         Optional<Item> itemGet = itemDao.findItemById(itemId);
         if (itemGet.isEmpty()) {
-            throw new NotFoundException(String.format("У пользователя с id %s не " +
+            throw new NotFoundException(String.format("У пользоватея с id %s не " +
                     "существует вещи с id %s", userId, itemId));
         }
         return ItemMapper.toItemDto(itemGet.get());
