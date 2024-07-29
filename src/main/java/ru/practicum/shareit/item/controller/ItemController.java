@@ -20,7 +20,7 @@ public class ItemController {
     @PostMapping
     public ItemDto add(@RequestHeader(USER_HEADER) Long userId,
                        @Valid @RequestBody ItemDto itemDto) {
-        log.info("POST Запрос на добавление пользователем с id = " + userId + " предмета " + itemDto.toString());
+        log.info("POST Запрос на добавления пользователем с id = " + userId + " предмета " + itemDto.toString());
         return itemService.add(userId, itemDto);
     }
 
