@@ -78,7 +78,7 @@ public class UserServiceDtoImpl implements UserServiceDto {
                 .anyMatch(thisUser -> thisUser.getEmail().equals(user.getEmail())
                         && !thisUser.getId().equals(user.getId()));
         if (isEmailNotUnique) {
-            throw new NotUniqueEmailException("Пользователь с такой электронной почтой уже существует");
+            throw new NotUniqueEmailException("Пользователь с такой эл почтой уже существует");
         }
     }
 
