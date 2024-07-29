@@ -55,7 +55,7 @@ public class UserServiceDaoImpl implements UserServiceDao {
 
     private void checkEmail(User user) {
         if (emails.contains(user.getEmail())) {
-            throw new NotUniqueEmailException("Пользователь с такой эл почтой уже существует");
+            throw new NotUniqueEmailException("Пользователь с такой электронной почтой уже существует");
         }
     }
 
@@ -63,7 +63,7 @@ public class UserServiceDaoImpl implements UserServiceDao {
         emails.remove(oldEmail);
         if (emails.contains(newEmail)) {
             emails.add(oldEmail);
-            throw new NotUniqueEmailException("Пользователь с такой эл почтой уже существует");
+            throw new NotUniqueEmailException("Пользователь с такой электронной почтой уже существует");
         }
         emails.add(newEmail);
     }
