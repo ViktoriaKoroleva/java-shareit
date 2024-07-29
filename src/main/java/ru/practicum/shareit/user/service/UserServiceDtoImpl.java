@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.NotUniqueEmailException;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.mapper.UserMapper;
+import ru.practicum.shareit.user.UserDto;
+import ru.practicum.shareit.user.UserMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -78,7 +78,7 @@ public class UserServiceDtoImpl implements UserServiceDto {
                 .anyMatch(thisUser -> thisUser.getEmail().equals(user.getEmail())
                         && !thisUser.getId().equals(user.getId()));
         if (isEmailNotUnique) {
-            throw new NotUniqueEmailException("Пользователь с такой эл почтой уже существует");
+            throw new NotUniqueEmailException("Пользователь с такой электронной почтой уже существует");
         }
     }
 
