@@ -1,10 +1,10 @@
 package ru.practicum.shareit.user;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.service.UserServiceDtoImpl;
 
-import javax.validation.Valid;
 import java.util.List;
 
 
