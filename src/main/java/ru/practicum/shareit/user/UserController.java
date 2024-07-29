@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.service.UserServiceDtoImpl;
 
+import java.util.List;
 
 
 @RestController
@@ -21,6 +22,11 @@ public class UserController {
     @GetMapping("/{userId}")
     public UserDto findById(@PathVariable Long userId) {
         return userService.findById(userId);
+    }
+
+    @GetMapping
+    public List<UserDto> findAll() {
+        return userService.findAll();
     }
 
     @PatchMapping("/{userId}")
