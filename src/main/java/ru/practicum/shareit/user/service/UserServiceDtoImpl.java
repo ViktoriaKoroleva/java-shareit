@@ -30,20 +30,7 @@ public class UserServiceDtoImpl implements UserServiceDto {
         if (!isUserInMemory(id)) {
             throw new NotFoundException("Пользователя с " + id + " не существует");
         }
-        User user = new User();
-        UserDto userFromMemory = findById(id);
-
-        if (userDto.getName() != null) {
-            user.setName(userDto.getName());
-        } else {
-            user.setName(userFromMemory.getName());
-        }
-        if (userDto.getEmail() != null) {
-            checkEmail(user);
-            user.setEmail(userDto.getEmail());
-        } else {
-            user.setEmail(userFromMemory.getEmail());
-        }
+        User user = UserMapper.toUser(userDto);
         user.setId(id);
         return UserMapper.toUserDto(userServiceDao.update(id, user));
     }

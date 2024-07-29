@@ -32,7 +32,6 @@ public class ItemServiceDtoImpl implements ItemServiceDto {
 
     @Override
     public ItemDto update(Long userId, Long itemId, ItemDto itemDto) {
-        UserDto user = UserMapper.toUserDto(userService.findById(userId));
         Optional<Item> itemOptional = itemDao.findItemById(itemId);
         if (itemOptional.isPresent()) {
             if (!itemOptional.get().getOwner().equals(userId)) {
