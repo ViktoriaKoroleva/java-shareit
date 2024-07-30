@@ -7,7 +7,6 @@ import ru.practicum.shareit.user.service.UserServiceDtoImpl;
 
 import java.util.List;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -20,7 +19,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public UserDto findById(@PathVariable Long userId) {
+    public UserDto findById(@PathVariable String userId) {
         return userService.findById(userId);
     }
 
@@ -30,12 +29,12 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public UserDto update(@PathVariable Long userId, @RequestBody UserDto userDto) {
+    public UserDto update(@PathVariable String userId, @RequestBody UserDto userDto) { // Изменено с Long на String
         return userService.update(userId, userDto);
     }
 
     @DeleteMapping("/{userId}")
-    public void delete(@PathVariable Long userId) {
+    public void delete(@PathVariable String userId) {
         userService.delete(userId);
     }
 }

@@ -11,9 +11,9 @@ public interface ItemServiceDao {
 
     Item update(Item item);
 
-    Optional<Item> findItemById(Long itemId);
+    Optional<Item> findItemById(String itemId);
 
-    List<Item> findAll(Long userId);
+    List<Item> findAll(String userId);
 
     List<Item> search(String text);
 }

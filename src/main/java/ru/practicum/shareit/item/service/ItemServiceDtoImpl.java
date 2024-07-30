@@ -23,15 +23,15 @@ public class ItemServiceDtoImpl implements ItemServiceDto {
     private final UserServiceDaoImpl userService;
 
     @Override
-    public ItemDto add(Long userId, ItemDto itemDto) {
+    public ItemDto add(String userId, ItemDto itemDto) { // Изменено с Long на String
         UserDto user = UserMapper.toUserDto(userService.findById(userId));
         Item item = ItemMapper.toItem(itemDto);
-        item.setOwner((UserMapper.toUser(user)).getId());
+        item.setOwner(UserMapper.toUser(user).getId());
         return ItemMapper.toItemDto(itemDao.add(item));
     }
 
     @Override
-    public ItemDto update(Long userId, Long itemId, ItemDto itemDto) {
+    public ItemDto update(String userId, String itemId, ItemDto itemDto) { // Изменено с Long на String
         Optional<Item> itemOptional = itemDao.findItemById(itemId);
         if (itemOptional.isPresent()) {
             if (!itemOptional.get().getOwner().equals(userId)) {
@@ -59,7 +59,7 @@ public class ItemServiceDtoImpl implements ItemServiceDto {
     }
 
     @Override
-    public ItemDto findItemById(Long userId, Long itemId) {
+    public ItemDto findItemById(String userId, String itemId) { // Изменено с Long на String
         userService.findById(userId);
         Optional<Item> itemGet = itemDao.findItemById(itemId);
         if (itemGet.isEmpty()) {
@@ -70,7 +70,7 @@ public class ItemServiceDtoImpl implements ItemServiceDto {
     }
 
     @Override
-    public List<ItemDto> findAll(Long userId) {
+    public List<ItemDto> findAll(String userId) { // Изменено с Long на String
         userService.findById(userId);
         List<Item> itemList = itemDao.findAll(userId);
         return itemList.stream()
@@ -79,7 +79,7 @@ public class ItemServiceDtoImpl implements ItemServiceDto {
     }
 
     @Override
-    public List<ItemDto> search(Long userId, String text) {
+    public List<ItemDto> search(String userId, String text) { // Изменено с Long на String
         userService.findById(userId);
         if (text.isBlank()) {
             return Collections.emptyList();
