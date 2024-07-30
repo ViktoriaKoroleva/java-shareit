@@ -36,7 +36,7 @@ public class ItemServiceDtoImpl implements ItemServiceDto {
         if (itemOptional.isPresent()) {
             if (!itemOptional.get().getOwner().equals(userId)) {
                 throw new NotFoundException(String.format("Пользователь с id %s " +
-                        "не является владельцем вещи id %s.", userId, itemId));
+                        "не явл владельцем вещи id %s.", userId, itemId));
             }
             Item itemFromStorage = itemOptional.get();
             Item item = ItemMapper.toItem(itemDto);
