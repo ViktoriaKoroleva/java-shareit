@@ -7,15 +7,17 @@ public class UserMapper {
 
     public static UserDto toUserDto(User user) {
         return new UserDto(
-                user.getId(),
+                user.getId() != null ? String.valueOf(user.getId()) : null,
                 user.getName(),
-                user.getEmail());
+                user.getEmail()
+        );
     }
 
     public static User toUser(UserDto userDto) {
         return new User(
-                userDto.getId(),
+                userDto.getId() != null ? Long.valueOf(userDto.getId()) : null,
                 userDto.getName(),
-                userDto.getEmail());
+                userDto.getEmail()
+        );
     }
 }
