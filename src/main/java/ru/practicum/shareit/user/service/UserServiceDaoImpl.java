@@ -11,38 +11,36 @@ import java.util.*;
 @Repository
 @RequiredArgsConstructor
 public class UserServiceDaoImpl implements UserServiceDao {
-    private final Map<Long, User> users = new HashMap<>();
+    private final Map<String, User> users = new HashMap<>();
     private final Set<String> emails = new HashSet<>();
     private Long generatorId = 1L;
 
     @Override
     public User add(User user) {
         checkEmail(user);
-        user.setId(generatorId);
-        users.put(generatorId, user);
+        String id = generateId();
+        user.setId(id);
+        users.put(id, user);
         emails.add(user.getEmail());
-        generatorId++;
         return user;
     }
 
     @Override
-    public User update(Long id, User user) {
+    public User update(String id, User user) {
         checkUserInMemory(id);
         updateEmail(findById(id).getEmail(), user.getEmail());
         users.put(id, user);
         return users.get(id);
     }
 
-
     @Override
-    public User findById(Long id) {
+    public User findById(String id) {
         checkUserInMemory(id);
         return users.get(id);
     }
 
-
     @Override
-    public void delete(Long id) {
+    public void delete(String id) {
         checkUserInMemory(id);
         emails.remove(findById(id).getEmail());
         users.remove(id);
@@ -68,9 +66,13 @@ public class UserServiceDaoImpl implements UserServiceDao {
         emails.add(newEmail);
     }
 
-    private void checkUserInMemory(Long id) {
+    private void checkUserInMemory(String id) {
         if (!users.containsKey(id)) {
             throw new NotFoundException("Пользователя с " + id + " не существует");
         }
+    }
+
+    private String generateId() {
+        return "USER-" + generatorId++;
     }
 }

@@ -10,9 +10,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class User {
 
-    private Long id;
-
+    private String id;
     private String name;
-
     private String email;
+
 }
