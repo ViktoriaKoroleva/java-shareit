@@ -26,7 +26,7 @@ public class UserServiceDtoImpl implements UserServiceDto {
     }
 
     @Override
-    public UserDto update(Long id, UserDto userDto) {
+    public UserDto update(String id, UserDto userDto) {
         if (!isUserInMemory(id)) {
             throw new NotFoundException("Пользователя с " + id + " не существует");
         }
@@ -44,12 +44,12 @@ public class UserServiceDtoImpl implements UserServiceDto {
         } else {
             user.setEmail(userFromMemory.getEmail());
         }
-        user.setId(id); // Убедитесь, что id передается как Long
+        user.setId(id); // id передается как String
         return UserMapper.toUserDto(userServiceDao.update(id, user));
     }
 
     @Override
-    public UserDto findById(Long id) {
+    public UserDto findById(String id) { // Изменено с Long на String
         if (!isUserInMemory(id)) {
             throw new NotFoundException("Пользователя с " + id + " не существует");
         }
@@ -58,7 +58,7 @@ public class UserServiceDtoImpl implements UserServiceDto {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(String id) { // Изменено с Long на String
         if (isUserInMemory(id)) {
             userServiceDao.delete(id);
         } else {
@@ -82,7 +82,7 @@ public class UserServiceDtoImpl implements UserServiceDto {
         }
     }
 
-    private boolean isUserInMemory(Long userId) {
+    private boolean isUserInMemory(String userId) { // Изменено с Long на String
         return userServiceDao.findAll().stream()
                 .anyMatch(user -> user.getId().equals(userId));
     }

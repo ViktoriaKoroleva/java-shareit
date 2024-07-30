@@ -8,11 +8,11 @@ public interface UserServiceDto {
 
     UserDto add(UserDto userDto);
 
-    UserDto update(Long id, UserDto userDto);
+    UserDto update(String id, UserDto userDto);
 
-    UserDto findById(Long id);
+    UserDto findById(String id);
 
-    void delete(Long id);
+    void delete(String id);
 
     List<UserDto> findAll();
 }

@@ -8,11 +8,11 @@ public interface UserServiceDao {
 
     User add(User user);
 
-    User update(Long id, User user);
+    User update(String id, User user);
 
-    User findById(Long id);
+    User findById(String id);
 
-    void delete(Long id);
+    void delete(String id);
 
     List<User> findAll();
 }

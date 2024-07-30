@@ -12,14 +12,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ItemServiceDaoImpl implements ItemServiceDao {
 
-    private final Map<Long, List<Item>> items = new HashMap<>();
+    private final Map<String, List<Item>> items = new HashMap<>();
     private Long generatorId = 1L;
 
     @Override
     public Item add(Item item) {
-        item.setId(generatorId);
+        String generatedId = generatorId.toString();
+        item.setId(generatedId);
         generatorId++;
-        List<Item> listItems = new ArrayList<>();
+        List<Item> listItems = items.getOrDefault(item.getOwner(), new ArrayList<>());
         listItems.add(item);
         items.put(item.getOwner(), listItems);
         return item;
@@ -27,27 +28,29 @@ public class ItemServiceDaoImpl implements ItemServiceDao {
 
     @Override
     public Item update(Item item) {
-        List<Item> userItems = items.get(item.getOwner());
-        List<Item> toRemove = userItems.stream()
-                .filter(userItem -> userItem.getId().equals(item.getId()))
+        List<Item> userItems = items.get(item.getOwner().toString());
+        if (userItems == null) {
+            throw new IllegalStateException("User not found");
+        }
+        userItems = userItems.stream()
+                .filter(userItem -> !userItem.getId().equals(item.getId()))
                 .collect(Collectors.toList());
-        userItems.removeAll(toRemove);
         userItems.add(item);
+        items.put(item.getOwner().toString(), userItems); // Преобразуем идентификатор владельца в строку
         return item;
     }
 
-
     @Override
-    public Optional<Item> findItemById(Long itemId) {
+    public Optional<Item> findItemById(String itemId) {
         return items.values().stream()
                 .flatMap(Collection::stream)
-                .filter(item -> item.getId().equals(itemId))
+                .filter(item -> item.getId().toString().equals(itemId)) // Преобразуем идентификатор предмета в строку для сравнения
                 .findFirst();
     }
 
     @Override
-    public List<Item> findAll(Long userId) {
-        return new ArrayList<>(items.get(userId));
+    public List<Item> findAll(String userId) {
+        return new ArrayList<>(items.getOrDefault(userId, Collections.emptyList()));
     }
 
     @Override
