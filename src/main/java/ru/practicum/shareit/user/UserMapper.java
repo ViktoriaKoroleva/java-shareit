@@ -7,7 +7,7 @@ public class UserMapper {
 
     public static UserDto toUserDto(User user) {
         return new UserDto(
-                user.getId(),
+                user.getId() != null ? user.getId().toString() : null,
                 user.getName(),
                 user.getEmail()
         );
@@ -15,7 +15,7 @@ public class UserMapper {
 
     public static User toUser(UserDto userDto) {
         return new User(
-                userDto.getId(),
+                userDto.getId() != null ? userDto.getId() : null,
                 userDto.getName(),
                 userDto.getEmail()
         );
