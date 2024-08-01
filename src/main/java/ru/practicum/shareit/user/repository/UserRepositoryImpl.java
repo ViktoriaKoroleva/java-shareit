@@ -39,7 +39,7 @@ public class UserRepositoryImpl implements UserRepository {
         int id = user.getId();
         User userFromDb = getById(id);
 
-        if (user.getEmail() == null || user.getEmail().isBlank()) {
+        if (user.getEmail() == null) {
             user.setEmail(userFromDb.getEmail());
         }
         if (user.getName() == null) {
@@ -51,7 +51,8 @@ public class UserRepositoryImpl implements UserRepository {
             throw new DuplicateEmailException("Email already exists");
         }
 
-        return userFromDb;
+        users.put(id, user);
+        return users.get(id);
     }
 
     @Override
