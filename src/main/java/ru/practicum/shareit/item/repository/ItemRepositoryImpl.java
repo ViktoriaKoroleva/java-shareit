@@ -7,10 +7,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -20,10 +17,6 @@ public class ItemRepositoryImpl implements ItemRepository {
     private final Map<Integer, Item> items = new HashMap<>();
 
     private int nextId = 1;
-
-    private int generateId() {
-        return nextId++;
-    }
 
     @Override
     public Item createItem(int userId, Item item) {
@@ -46,9 +39,7 @@ public class ItemRepositoryImpl implements ItemRepository {
             throw new NotUniqueEmailException("user does not match the item owner");
         }
 
-        int id = item.getId();
-
-        if (itemDto.getName() != null) {
+        if (itemDto.getName() != null && !itemDto.getName().isBlank()) {
             item.setName(itemDto.getName());
         }
 
@@ -56,7 +47,7 @@ public class ItemRepositoryImpl implements ItemRepository {
             item.setAvailable(itemDto.getAvailable());
         }
 
-        if (itemDto.getDescription() != null) {
+        if (itemDto.getDescription() != null && !itemDto.getDescription().isBlank()) {
             item.setDescription(itemDto.getDescription());
         }
 
@@ -64,8 +55,7 @@ public class ItemRepositoryImpl implements ItemRepository {
             item.setRequest(itemDto.getRequest());
         }
 
-        items.put(id, item);
-        return findItemById(id);
+        return item;
     }
 
     @Override
@@ -82,14 +72,18 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Override
     public List<Item> findItemByText(int userId, String text) {
         if (text.isEmpty()) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
-       String textLowerCase = text.toLowerCase();
-       return items.values().stream()
+        String textLowerCase = text.toLowerCase();
+        return items.values().stream()
                 .filter(item -> item.getAvailable().equals(true))
                 .filter(item -> item.getName().toLowerCase().contains(textLowerCase)
                         || item.getDescription().toLowerCase().contains(textLowerCase))
                 .collect(Collectors.toList());
+    }
+
+    private int generateId() {
+        return nextId++;
     }
 
 }
