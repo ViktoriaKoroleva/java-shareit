@@ -77,7 +77,7 @@ public class ItemRepositoryImpl implements ItemRepository {
         String textLowerCase = text.toLowerCase();
         return userItemIndex.getOrDefault(userId, Collections.emptyList())
                 .stream()
-                .filter(item -> item.getAvailable().equals(true))
+                .filter(item -> Boolean.TRUE.equals(item.getAvailable()))
                 .filter(item -> item.getName().toLowerCase().contains(textLowerCase)
                         || item.getDescription().toLowerCase().contains(textLowerCase))
                 .collect(Collectors.toList());
