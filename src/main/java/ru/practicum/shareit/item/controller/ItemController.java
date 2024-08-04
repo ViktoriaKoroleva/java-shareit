@@ -8,6 +8,7 @@ import ru.practicum.shareit.item.dto.UpdateItemRequest;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -42,6 +43,9 @@ public class ItemController {
     @GetMapping("/search")
     public List<Item> findItemByText(@RequestHeader("X-Sharer-User-Id") int userId,
                                      @RequestParam("text") String text) {
+        if (text.isBlank()) {
+            return Collections.emptyList();
+        }
         return itemService.findItemByText(userId, text);
     }
 }

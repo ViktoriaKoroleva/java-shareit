@@ -74,9 +74,6 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public List<Item> findItemByText(int userId, String text) {
-        if (text.isEmpty()) {
-            return Collections.emptyList();
-        }
         String textLowerCase = text.toLowerCase();
         return userItemIndex.getOrDefault(userId, Collections.emptyList())
                 .stream()
