@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class ItemRepositoryImpl implements ItemRepository {
     private final UserRepository userRepository;
     private final Map<Integer, Item> items = new HashMap<>();
+    private final Map<Integer, List<Item>> userItemIndex = new LinkedHashMap<>();
 
     private int nextId = 1;
 
@@ -26,7 +27,10 @@ public class ItemRepositoryImpl implements ItemRepository {
         item.setId(generateId());
         int id = item.getId();
         items.put(id, item);
-        user.getUserItems().add(item);
+
+        final List<Item> userItems = userItemIndex.computeIfAbsent(userId, k -> new ArrayList<>());
+        userItems.add(item);
+
         return findItemById(id);
     }
 
@@ -65,8 +69,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public List<Item> findUserItemsById(int userId) {
-        User user = userRepository.getById(userId);
-        return user.getUserItems();
+        return userItemIndex.getOrDefault(userId, Collections.emptyList());
     }
 
     @Override
@@ -75,7 +78,8 @@ public class ItemRepositoryImpl implements ItemRepository {
             return Collections.emptyList();
         }
         String textLowerCase = text.toLowerCase();
-        return items.values().stream()
+        return userItemIndex.getOrDefault(userId, Collections.emptyList())
+                .stream()
                 .filter(item -> item.getAvailable().equals(true))
                 .filter(item -> item.getName().toLowerCase().contains(textLowerCase)
                         || item.getDescription().toLowerCase().contains(textLowerCase))
