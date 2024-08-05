@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.exception.modelException.DuplicateEmailException;
 import ru.practicum.shareit.exception.modelException.NotUniqueEmailException;
+import ru.practicum.shareit.exception.modelException.UserNotFoundException;
 import ru.practicum.shareit.exception.modelException.ValidationException;
 
 import java.util.HashMap;
@@ -17,21 +18,22 @@ import java.util.Map;
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
-    @ExceptionHandler
+    @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidation(final ValidationException exception) {
         log.error("Validation exception: {}", exception.getMessage(), exception);
         return new ErrorResponse(exception.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFound(final NotUniqueEmailException exception) {
-        log.error("Not found exception: {}", exception.getMessage(), exception);
+    public ErrorResponse handleUserNotFound(final UserNotFoundException exception) {
+        log.error("User not found exception: {}", exception.getMessage(), exception);
         return new ErrorResponse(exception.getMessage());
     }
 
-    @ExceptionHandler
+
+    @ExceptionHandler(DuplicateEmailException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleDuplicateEmail(final DuplicateEmailException exception) {
         log.error("Duplicate email exception: {}", exception.getMessage(), exception);

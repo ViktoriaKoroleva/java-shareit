@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.modelException.NotUniqueEmailException;
+import ru.practicum.shareit.exception.modelException.UserNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -23,6 +24,9 @@ public class ItemRepositoryImpl implements ItemRepository {
     public Item createItem(int userId, Item item) {
         User user = userRepository.getById(userId);
 
+        if (user == null) {
+            throw new UserNotFoundException("User with id " + userId + " not found");
+        }
         item.setIdOwner(userId);
         item.setId(generateId());
         int id = item.getId();
@@ -40,7 +44,7 @@ public class ItemRepositoryImpl implements ItemRepository {
         Item item = items.get(itemId);
 
         if (user.getId() != item.getIdOwner()) {
-            throw new NotUniqueEmailException("user does not match the item owner");
+            throw new UserNotFoundException("user does not match the item owner");
         }
 
         if (itemDto.getName() != null && !itemDto.getName().isBlank()) {
