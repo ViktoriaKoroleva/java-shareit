@@ -47,7 +47,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
 
         if (isDuplicateEmail(user.getEmail()) && !user.getEmail().equals(userFromDb.getEmail())) {
-            throw new DuplicateEmailException("Email already exists");
+            throw new DuplicateEmailException("Email already exist");
         }
 
         users.put(id, user);
