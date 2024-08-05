@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.exception.modelException.DuplicateEmailException;
 import ru.practicum.shareit.exception.modelException.NotUniqueEmailException;
+import ru.practicum.shareit.exception.modelException.UserNotFoundException;
 import ru.practicum.shareit.exception.modelException.ValidationException;
 
 import java.util.HashMap;
@@ -30,7 +31,12 @@ public class ErrorHandler {
         log.error("Not found exception: {}", exception.getMessage(), exception);
         return new ErrorResponse(exception.getMessage());
     }
-
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleUserNotFound(UserNotFoundException exception) {
+        log.error("User not found exception: {}", exception.getMessage(), exception);
+        return new ErrorResponse(exception.getMessage());
+    }
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleDuplicateEmail(final DuplicateEmailException exception) {
