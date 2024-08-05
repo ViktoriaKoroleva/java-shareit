@@ -32,12 +32,6 @@ public class ErrorHandler {
         return new ErrorResponse(exception.getMessage());
     }
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleUserNotFound(UserNotFoundException exception) {
-        log.error("User not found exception: {}", exception.getMessage(), exception);
-        return new ErrorResponse(exception.getMessage());
-    }
-    @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleDuplicateEmail(final DuplicateEmailException exception) {
         log.error("Duplicate email exception: {}", exception.getMessage(), exception);
