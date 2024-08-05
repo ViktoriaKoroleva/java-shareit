@@ -59,7 +59,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> findUserItemsById(int userId) {
-        log.info("Finding items for user with id '{}'", userId);
+        log.info("Finding items for user wit id '{}'", userId);
         return itemRepository.findAllByUserId(userId);
     }
 
