@@ -3,7 +3,7 @@ package ru.practicum.shareit.user.repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.modelException.DuplicateEmailException;
-import ru.practicum.shareit.exception.modelException.UserNotFoundException;
+import ru.practicum.shareit.exception.modelException.NotUniqueEmailException;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
@@ -25,11 +25,12 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User create(User user) {
         if (isDuplicateEmail(user.getEmail())) {
-            throw new DuplicateEmailException("Email alead exists");
+            throw new DuplicateEmailException("Email aled exists");
         }
 
         user.setId(generateId());
         int id = user.getId();
+        users.put(id, user);
         return users.get(id);
     }
 
@@ -38,10 +39,10 @@ public class UserRepositoryImpl implements UserRepository {
         int id = user.getId();
         User userFromDb = getById(id);
 
-        if (user.getEmail() == null || user.getEmail().isBlank()) {
+        if (user.getEmail() == null) {
             user.setEmail(userFromDb.getEmail());
         }
-        if (user.getName() == null || user.getName().isBlank()) {
+        if (user.getName() == null) {
             user.setName(userFromDb.getName());
         }
         users.remove(id);
@@ -49,13 +50,15 @@ public class UserRepositoryImpl implements UserRepository {
             users.put(userFromDb.getId(), userFromDb);
             throw new DuplicateEmailException("Email already exists");
         }
+
+        users.put(id, user);
         return users.get(id);
     }
 
     @Override
     public User getById(int id) {
         if (!users.containsKey(id)) {
-            throw new UserNotFoundException("No User with such id");
+            throw new NotUniqueEmailException("No User with such id");
         }
 
         return users.get(id);
