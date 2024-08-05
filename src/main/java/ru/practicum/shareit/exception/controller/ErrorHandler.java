@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.exception.modelException.DuplicateEmailException;
-import ru.practicum.shareit.exception.modelException.NotUniqueEmailException;
 import ru.practicum.shareit.exception.modelException.UserNotFoundException;
 import ru.practicum.shareit.exception.modelException.ValidationException;
 
