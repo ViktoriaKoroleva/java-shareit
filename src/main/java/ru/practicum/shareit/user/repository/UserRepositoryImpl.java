@@ -45,12 +45,12 @@ public class UserRepositoryImpl implements UserRepository {
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(userFromDb.getName());
         }
-        if (isDuplicateEmail(user.getEmail())) {
-            users.put(userFromDb.getId(), userFromDb);
+
+        if (isDuplicateEmail(user.getEmail()) && !user.getEmail().equals(userFromDb.getEmail())) {
             throw new DuplicateEmailException("Email already exists");
         }
-        users.put(id, user);
 
+        users.put(id, user);
         return users.get(id);
     }
 
