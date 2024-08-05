@@ -5,13 +5,13 @@ import ru.practicum.shareit.item.model.Item;
 import java.util.List;
 
 public interface ItemRepository {
-    Item create(Item item);
+    Item createItem(int userId, Item item);
 
-    Item update(Item item);
+    Item updateItem(int userId, int itemId, Item itemDto);
 
-    Item findById(int itemId);
+    Item findItemById(int itemId);
 
-    List<Item> findAllByUserId(int userId);
+    List<Item> findUserItemsById(int userId);
 
-    List<Item> findByText(String text);
+    List<Item> findItemByText(int userId, String text);
 }
