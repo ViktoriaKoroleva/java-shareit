@@ -25,7 +25,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User create(User user) {
         if (isDuplicateEmail(user.getEmail())) {
-            throw new DuplicateEmailException("Email already exists");
+            throw new DuplicateEmailException("Email alread exists");
         }
 
         user.setId(generateId());
