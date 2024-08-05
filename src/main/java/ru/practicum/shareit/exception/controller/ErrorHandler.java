@@ -30,6 +30,7 @@ public class ErrorHandler {
         log.error("Not found exception: {}", exception.getMessage(), exception);
         return new ErrorResponse(exception.getMessage());
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleDuplicateEmail(final DuplicateEmailException exception) {
