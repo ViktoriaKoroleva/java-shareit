@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse update(int userId, UpdateUserRequest userDto) {
         User existingUser = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+                .orElseThrow(() -> new EntityNotFoundException("User not ound with id: " + userId));
 
         String name = userDto.getName();
         if (name != null && !name.isBlank()) {
