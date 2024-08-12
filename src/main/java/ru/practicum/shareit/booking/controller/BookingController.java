@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingResponse;
@@ -8,6 +7,7 @@ import ru.practicum.shareit.booking.dto.CreateBookingRequest;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.util.HttpHeaders;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
