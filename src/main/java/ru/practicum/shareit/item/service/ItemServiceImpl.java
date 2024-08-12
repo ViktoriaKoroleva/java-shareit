@@ -208,7 +208,7 @@ public class ItemServiceImpl implements ItemService {
 
     private User checkUserExist(int userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+                .orElseThrow(() -> new EntityNotFoundException("User no found with id: " + userId));
     }
 
 }
