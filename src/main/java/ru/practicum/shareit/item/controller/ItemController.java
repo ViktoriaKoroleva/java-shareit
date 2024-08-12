@@ -1,15 +1,12 @@
 package ru.practicum.shareit.item.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.HeaderConstants;
-import ru.practicum.shareit.item.dto.CreateItemRequest;
-import ru.practicum.shareit.item.dto.UpdateItemRequest;
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.util.HttpHeaders;
 
-import java.util.Collections;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,34 +16,38 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping
-    public Item createItem(@Valid @RequestBody CreateItemRequest itemDto,
-                           @RequestHeader(HeaderConstants.USER_ID_HEADER) int userId) {
+    public ItemResponse createItem(@Valid @RequestBody CreateItemRequest itemDto,
+                                   @RequestHeader(HttpHeaders.USER_ID) int userId) {
         return itemService.createItem(userId, itemDto);
     }
 
     @PatchMapping("/{itemId}")
-    public Item updateItem(@RequestHeader(HeaderConstants.USER_ID_HEADER) int userId,
-                           @PathVariable int itemId,
-                           @RequestBody UpdateItemRequest itemDto) {
+    public ItemResponse updateItem(@RequestHeader(HttpHeaders.USER_ID) int userId,
+                                   @PathVariable int itemId,
+                                   @Valid @RequestBody UpdateItemRequest itemDto) {
         return itemService.updateItem(userId, itemId, itemDto);
     }
 
     @GetMapping("/{itemId}")
-    public Item findItemById(@PathVariable int itemId) {
-        return itemService.findItemById(itemId);
+    public ItemResponse findItemById(@RequestHeader(HttpHeaders.USER_ID) int userId,
+                                     @PathVariable int itemId) {
+        return itemService.findItemById(itemId, userId);
     }
 
     @GetMapping
-    public List<Item> findUserItemsById(@RequestHeader(HeaderConstants.USER_ID_HEADER) int userId) {
+    public List<ItemResponse> findUserItemsById(@RequestHeader(HttpHeaders.USER_ID) int userId) {
         return itemService.findUserItemsById(userId);
     }
 
     @GetMapping("/search")
-    public List<Item> findItemByText(@RequestHeader(HeaderConstants.USER_ID_HEADER) int userId,
-                                     @RequestParam("text") String text) {
-        if (text.isBlank()) {
-            return Collections.emptyList();
-        }
+    public List<ItemResponse> findItemByText(@RequestHeader(HttpHeaders.USER_ID) int userId,
+                                             @RequestParam("text") String text) {
         return itemService.findItemByText(userId, text);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentResponse createComment(@RequestHeader(HttpHeaders.USER_ID) int userId,
+                                         @PathVariable int itemId, @Valid @RequestBody CreateCommentRequest commentDto) {
+        return itemService.createComment(userId, itemId, commentDto);
     }
 }
