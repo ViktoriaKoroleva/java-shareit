@@ -1,53 +1,73 @@
 package ru.practicum.shareit.item.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.comment.dto.CommentDto;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemInfoDto;
 import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.util.HttpHeaders;
+import ru.practicum.shareit.validator.ValidateWhile;
 
-import javax.validation.Valid;
+import java.util.Collection;
 import java.util.List;
 
+@Slf4j
 @RestController
-@RequestMapping("/items")
 @RequiredArgsConstructor
+@RequestMapping("/items")
 public class ItemController {
+
     private final ItemService itemService;
 
+    @GetMapping
+    public ResponseEntity<Collection<ItemDto>> getAllByOwner(@RequestHeader("X-Sharer-User-Id") String ownerId) {
+        log.info("Вызов метода GET всех инструментов для пользователя с id={}", ownerId);
+        return ResponseEntity.ok().body(itemService.getAllByOwner(ownerId));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ItemInfoDto> getById(@RequestHeader("X-Sharer-User-Id") String ownerId, @PathVariable long id) {
+        log.info("Вызов метода GET инструмента с id={} для пользователя с id={}", id, ownerId);
+        return ResponseEntity.ok().body(itemService.getItem(ownerId, id));
+    }
+
     @PostMapping
-    public ItemResponse createItem(@Valid @RequestBody CreateItemRequest itemDto,
-                                   @RequestHeader(HttpHeaders.USER_ID) int userId) {
-        return itemService.createItem(userId, itemDto);
+    public ResponseEntity<ItemDto> add(@RequestHeader("X-Sharer-User-Id") String ownerId,
+                                       @RequestBody @Validated(ValidateWhile.Create.class) ItemDto itemDto) {
+        log.info("Вызов метода POST инструмента: ownerId={}, item={}", ownerId, itemDto);
+        return ResponseEntity.ok().body(itemService.createItemForOwner(ownerId, itemDto));
     }
 
     @PatchMapping("/{itemId}")
-    public ItemResponse updateItem(@RequestHeader(HttpHeaders.USER_ID) int userId,
-                                   @PathVariable int itemId,
-                                   @Valid @RequestBody UpdateItemRequest itemDto) {
-        return itemService.updateItem(userId, itemId, itemDto);
-    }
-
-    @GetMapping("/{itemId}")
-    public ItemResponse findItemById(@RequestHeader(HttpHeaders.USER_ID) int userId,
-                                     @PathVariable int itemId) {
-        return itemService.findItemById(itemId, userId);
-    }
-
-    @GetMapping
-    public List<ItemResponse> findUserItemsById(@RequestHeader(HttpHeaders.USER_ID) int userId) {
-        return itemService.findUserItemsById(userId);
+    public ResponseEntity<ItemDto> update(@RequestHeader("X-Sharer-User-Id") String ownerId,
+                                          @RequestBody @Validated(ValidateWhile.Update.class) ItemDto itemDto,
+                                          @PathVariable(required = false) Long itemId) {
+        log.info("Вызов метода PATCH инструмента {}", itemDto.getName());
+        if (itemId != null) {
+            itemDto.setId(itemId);
+        }
+        ItemDto updatedItem = itemService.updateItem(ownerId, itemDto);
+        log.info("Инструмент {} с id={} успешно обновлен.", itemDto.getName(), itemDto.getId());
+        return ResponseEntity.ok().body(updatedItem);
     }
 
     @GetMapping("/search")
-    public List<ItemResponse> findItemByText(@RequestHeader(HttpHeaders.USER_ID) int userId,
-                                             @RequestParam("text") String text) {
-        return itemService.findItemByText(userId, text);
+    public ResponseEntity<Collection<ItemDto>> getSelection(@RequestParam(defaultValue = "") String text) {
+        log.info("Вызов метода GET /search инструмента со следующим текстом='{}'", text);
+        List<ItemDto> returnedItems = itemService.getSelection(text);
+        log.info("Получен список размером {}", returnedItems.size());
+        return ResponseEntity.ok().body(returnedItems);
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentResponse createComment(@RequestHeader(HttpHeaders.USER_ID) int userId,
-                                         @PathVariable int itemId, @Valid @RequestBody CreateCommentRequest commentDto) {
-        return itemService.createComment(userId, itemId, commentDto);
+    public ResponseEntity<CommentDto> addComment(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                 @PathVariable Long itemId,
+                                 @RequestBody CommentDto commentDto) {
+        log.info("Вызов метода POST /{itemId}/comment инструмента со следующим userId='{}' itemId='{}' commentDto='{}', ", userId, itemId, commentDto);
+        return ResponseEntity.ok().body(itemService.addComment(userId, itemId, commentDto));
     }
+
 }

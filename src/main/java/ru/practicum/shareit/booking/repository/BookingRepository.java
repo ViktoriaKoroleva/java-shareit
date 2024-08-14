@@ -1,61 +1,35 @@
 package ru.practicum.shareit.booking.repository;
 
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.model.Status;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.booking.model.BookingStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-public interface BookingRepository extends JpaRepository<Booking, Integer> {
+public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    List<Booking> findAllByBookerId(int bookerId, Sort sort);
+    List<Booking> findAllByBookerIdOrderByStartDesc(Long userId);
 
-    List<Booking> findAllByBookerIdAndStartBeforeAndEndAfter(int bookerId, LocalDateTime s, LocalDateTime s1);
+    List<Booking> findAllByBookerIdAndItemIdAndStatusAndEndBefore(Long userId, Long itemId, BookingStatus status, LocalDateTime localDateTime);
 
-    List<Booking> findAllByBookerIdAndStatus(int bookerId, Status status, Sort sort);
+    List<Booking> findAllByBookerIdAndStatusOrderByStartDesc(Long userId, BookingStatus status);
 
-    List<Booking> findALlByBookerIdAndStartAfter(int bookerId, LocalDateTime end, Sort sort);
+    List<Booking> findAllByBookerIdAndStartAfterOrderByStartDesc(Long userId, LocalDateTime localDateTime);
 
-    List<Booking> findAllByBookerIdAndEndBefore(int bookerId, LocalDateTime end, Sort sort);
+    List<Booking> findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(Long userId, LocalDateTime localDateTime1, LocalDateTime localDateTime2);
 
+    List<Booking> findAllByBookerIdAndEndBeforeOrderByStartDesc(Long userId, LocalDateTime localDateTime);
 
-    List<Booking> findAllByItemIdOwnerOrderByStartDesc(User ownerId);
+    List<Booking> findAllByItemOwnerIdOrderByStartDesc(Long userId);
 
-    List<Booking> findAllByItemIdOwnerAndStatusOrderByStartDesc(User ownerId, Status status);
+    List<Booking> findAllByItemOwnerIdAndStatusOrderByStartDesc(Long userId, BookingStatus status);
 
+    List<Booking> findAllByItemOwnerIdAndStartAfterOrderByStartDesc(Long userId, LocalDateTime localDateTime);
 
-    List<Booking> findAllByItemIdOwnerAndStartIsBeforeAndEndIsAfterOrderByStartDesc(User ownerId, LocalDateTime start,
-                                                                                    LocalDateTime end);
+    List<Booking> findAllByItemOwnerIdAndEndBeforeOrderByStartDesc(Long userId, LocalDateTime localDateTime);
 
-    List<Booking> findALLByItemIdOwnerAndStartIsAfterOrderByStartDesc(User ownerId, LocalDateTime start);
-
-    List<Booking> findALLByItemIdOwnerAndEndIsBeforeOrderByStartDesc(User ownerId, LocalDateTime end);
+    List<Booking> findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(Long userId, LocalDateTime localDateTime1, LocalDateTime localDateTime2);
 
 
-    Optional<Booking> findFirstByItemIdAndStatusAndStartBeforeOrderByEndDesc(int itemId, Status status, LocalDateTime start);
-
-    Optional<Booking> findFirstByItemIdAndStatusAndStartAfterOrderByStart(int itemId, Status status, LocalDateTime start);
-
-    List<Booking> findAllByBookerIdAndItemIdAndEndBeforeAndStatus(int bookerId, int itemId,
-                                                                  LocalDateTime end, Status status);
-
-    @EntityGraph(attributePaths = {"item", "booker"})
-    @Query("SELECT b FROM Booking b WHERE b.item.id IN :itemIds AND b.status = :status AND b.start < :currentDate")
-    List<Booking> findAllLastBookingsByItemsAndStatus(@Param("itemIds") List<Integer> itemIds,
-                                                      @Param("status") Status status,
-                                                      @Param("currentDate") LocalDateTime currentDate);
-
-
-    @EntityGraph(attributePaths = {"item", "booker"})
-    @Query("SELECT b FROM Booking b WHERE b.item.id IN :itemIds AND b.status = :status AND b.start > :currentDate")
-    List<Booking> findAllNextBookingsByItemsAndStatus(@Param("itemIds") List<Integer> itemIds,
-                                                      @Param("status") Status status,
-                                                      @Param("currentDate") LocalDateTime currentDate);
 }
