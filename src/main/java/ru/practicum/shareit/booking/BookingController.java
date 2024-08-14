@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.validator.ValidateWhile;
+import ru.practicum.shareit.validator.ValidationGroups;
 
 import java.util.Collection;
 
@@ -21,7 +21,7 @@ public class BookingController {
 
     @PostMapping
     public ResponseEntity<BookingDto> create(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                             @RequestBody @Validated(ValidateWhile.Create.class) BookingRequestDto bookingRequestDto) {
+                                             @RequestBody @Validated(ValidationGroups.Create.class) BookingRequestDto bookingRequestDto) {
         log.info("Вызов метода POST бронирования: userId={}, booking={}", userId, bookingRequestDto);
         return ResponseEntity.ok().body(bookingService.saveBooking(userId, bookingRequestDto));
     }

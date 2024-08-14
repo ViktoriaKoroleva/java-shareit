@@ -7,24 +7,24 @@ import jakarta.validation.constraints.Null;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import ru.practicum.shareit.validator.ValidateWhile;
+import ru.practicum.shareit.validator.ValidationGroups;
 
 @Getter
 @Setter
 @Builder
 public class UserDto {
 
-    @Null(groups = ValidateWhile.Create.class, message = "При создании пользователя id должно быть null.")
+    @Null(groups = ValidationGroups.Create.class, message = "При создании пользователя id должно быть null.")
     private Long id;
 
-    @NotBlank(groups = ValidateWhile.Create.class, message = "Имя пользователя не может быть пустым")
+    @NotBlank(groups = ValidationGroups.Create.class, message = "Имя пользователя не может быть пустым")
     private String name;
 
-    @Email(groups = ValidateWhile.Create.class,
+    @Email(groups = ValidationGroups.Create.class,
             message = "email не соответствует стандарту электронного почтового адреса")
-    @Email(groups = ValidateWhile.Update.class,
+    @Email(groups = ValidationGroups.Update.class,
             message = "email не соответствует стандарту электронного почтового адреса")
-    @NotNull(groups = ValidateWhile.Create.class, message = "Email пользователя не может быть пустым")
+    @NotNull(groups = ValidationGroups.Create.class, message = "Email пользователя не может быть пустым")
     private String email;
 
 }

@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto saveUser(UserDto userDto) {
         if (!userRepository.findByEmail(userDto.getEmail()).isEmpty()) {
-            throw new DuplicatedException("Пользователь с таким email уже существует");
+            throw new DuplicatedException("Пользователь с таким email существует");
         }
         User createdUser = userRepository.save(userMapper.toModel(userDto));
         return userMapper.toDto(createdUser);
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
             user.setEmail(retrievedUser.getEmail());
         } else if (!userRepository.findByEmail(user.getEmail()).isEmpty() &&
                 !user.getEmail().equals(retrievedUser.getEmail())) {
-            throw new DuplicatedException("Пользователь с таким email уже существует");
+            throw new DuplicatedException("Пользователь с таким email существует");
         }
         if (user.getName() == null || user.getName().isEmpty()) {
             user.setName(retrievedUser.getName());

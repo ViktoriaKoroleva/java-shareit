@@ -9,7 +9,7 @@ import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemInfoDto;
 import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.validator.ValidateWhile;
+import ru.practicum.shareit.validator.ValidationGroups;
 
 import java.util.Collection;
 import java.util.List;
@@ -36,14 +36,14 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<ItemDto> add(@RequestHeader("X-Sharer-User-Id") String ownerId,
-                                       @RequestBody @Validated(ValidateWhile.Create.class) ItemDto itemDto) {
+                                       @RequestBody @Validated(ValidationGroups.Create.class) ItemDto itemDto) {
         log.info("Вызов метода POST инструмента: ownerId={}, item={}", ownerId, itemDto);
         return ResponseEntity.ok().body(itemService.createItemForOwner(ownerId, itemDto));
     }
 
     @PatchMapping("/{itemId}")
     public ResponseEntity<ItemDto> update(@RequestHeader("X-Sharer-User-Id") String ownerId,
-                                          @RequestBody @Validated(ValidateWhile.Update.class) ItemDto itemDto,
+                                          @RequestBody @Validated(ValidationGroups.Update.class) ItemDto itemDto,
                                           @PathVariable(required = false) Long itemId) {
         log.info("Вызов метода PATCH инструмента {}", itemDto.getName());
         if (itemId != null) {

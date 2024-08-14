@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.validator.ValidateWhile;
+import ru.practicum.shareit.validator.ValidationGroups;
 
 import java.time.LocalDateTime;
 
@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class BookingRequestDto {
-    @NotNull(groups = ValidateWhile.Create.class, message = "Отсутствует Id предмета для бронирования")
+    @NotNull(groups = ValidationGroups.Create.class, message = "Отсутствует Id предмета для бронирования")
     private Long itemId;
-    @NotNull(groups = ValidateWhile.Create.class, message = "Отсутствует StartTime начала бронирования")
+    @NotNull(groups = ValidationGroups.Create.class, message = "Отсутствует StartTime начала бронирования")
     private LocalDateTime start;
-    @NotNull(groups = ValidateWhile.Create.class, message = "Отсутствует EndTime окончания бронирования")
+    @NotNull(groups = ValidationGroups.Create.class, message = "Отсутствует EndTime окончания бронирования")
     private LocalDateTime end;
 }

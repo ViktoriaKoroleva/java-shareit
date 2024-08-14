@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.validator.ValidateWhile;
+import ru.practicum.shareit.validator.ValidationGroups;
 
 import java.time.LocalDateTime;
 
@@ -18,13 +18,13 @@ import java.time.LocalDateTime;
 @Builder
 public class BookingDto {
 
-    @Null(groups = ValidateWhile.Create.class, message = "При создании бронирования id должно быть null.")
+    @Null(groups = ValidationGroups.Create.class, message = "При создании бронирования id должно быть null.")
     private Long id;
 
-    @NotNull(groups = ValidateWhile.Create.class, message = "Дата бронирования должна быть в будущем")
+    @NotNull(groups = ValidationGroups.Create.class, message = "Дата бронирования должна быть в будущем")
     private LocalDateTime start;
 
-    @NotNull(groups = ValidateWhile.Create.class, message = "Дата бронирования должна быть в будущем")
+    @NotNull(groups = ValidationGroups.Create.class, message = "Дата бронирования должна быть в будущем")
     private LocalDateTime end;
     private ItemDto item;
     private UserDto booker;
