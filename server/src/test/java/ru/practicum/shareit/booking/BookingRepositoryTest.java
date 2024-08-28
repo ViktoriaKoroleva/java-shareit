@@ -87,7 +87,7 @@ class BookingRepositoryTest {
 
     @Test
     void findAllByBookerIdOrderByStartDesc() {
-        List<Booking> bookings = bookingRepository.findByBookerIdOrderByStartDesc(booker.getId());
+        List<Booking> bookings = bookingRepository.findAllByBookerIdOrderByStartDesc(booker.getId());
         assertEquals(bookings.size(), 3);
         assertEquals(bookings.getFirst().getBooker().getId(), 1L);
     }

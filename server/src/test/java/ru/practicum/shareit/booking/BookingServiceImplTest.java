@@ -93,7 +93,7 @@ class BookingServiceImplTest {
 
         when(bookingRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
-        when(bookingRepository.findByBookerIdOrderByStartDesc(anyLong())).thenReturn(List.of(booking));
+        when(bookingRepository.findAllByBookerIdOrderByStartDesc(anyLong())).thenReturn(List.of(booking));
         when(bookingRepository.findAllByItemOwnerIdOrderByStartDesc(anyLong())).thenReturn(List.of(booking));
     }
 
@@ -142,7 +142,7 @@ class BookingServiceImplTest {
         Assertions.assertEquals(result.getFirst().getItem(), bookingDto.getItem());
         Assertions.assertEquals(result.getFirst().getStatus(), bookingDto.getStatus());
         Assertions.assertEquals(result.getFirst().getBooker(), bookingDto.getBooker());
-        verify(bookingRepository, times(1)).findByBookerIdOrderByStartDesc(anyLong());
+        verify(bookingRepository, times(1)).findAllByBookerIdOrderByStartDesc(anyLong());
     }
 
     @Test
