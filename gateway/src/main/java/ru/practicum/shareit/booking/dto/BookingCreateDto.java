@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -24,7 +25,7 @@ public class BookingCreateDto {
 
     @AssertTrue(message = "end before start")
     public boolean isEndAfterStart() {
-        if (end != null && start != null) {
+        if (Objects.nonNull(end) && Objects.nonNull(start)) {
             return end.isAfter(start);
         } else {
             return true;
@@ -33,7 +34,7 @@ public class BookingCreateDto {
 
     @AssertTrue(message = "start equals end")
     public boolean isStartEqualEnd() {
-        if (end != null && start != null) {
+        if (Objects.nonNull(end) && Objects.nonNull(start)) {
             return !start.isEqual(end);
         } else {
             return true;
